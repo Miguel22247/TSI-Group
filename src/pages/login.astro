@@ -49,10 +49,11 @@ const title = "Login";
   <script type="module">
     document.addEventListener('DOMContentLoaded', () => {
       // Simulate fetching registered user from server
-      const registeredUser = {
-        name: "testuser",
-        password: "password123"
-      };
+      // const registeredUser = {
+      //   name: "testuser",
+      //   password: "password123"
+      // };
+      const registeredUser = JSON.parse(localStorage.getItem('registeredUser')) || null;
 
       const form = document.getElementById('login-form');
       const messageDiv = document.getElementById('login-message');
@@ -92,6 +93,9 @@ const title = "Login";
         messageDiv.classList.add("text-green-500");
         // Add your login logic here (e.g., redirect)
         localStorage.setItem('isLoggedIn', 'true');
+        setTimeout(() => {
+          window.location.href = "/TSI-Group/dashboard";
+        }, 1000);
       });
     });
   </script>
