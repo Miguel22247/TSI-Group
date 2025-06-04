@@ -26,8 +26,8 @@ if (typeof window !== "undefined") {
   <div
     class="flex min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700"
   >
-    <!-- Sidebar -->
-    <!-- Mobile Sidebar Toggle Button -->
+    {/* Sidebar */}
+    {/* Mobile Sidebar Toggle Button */}
     <button
       id="sidebar-toggle"
       type="button"
@@ -45,11 +45,12 @@ if (typeof window !== "undefined") {
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
-          d="M4 6h16M4 12h16M4 18h16"></path>
+          d="M4 6h16M4 12h16M4 18h16"
+        ></path>
       </svg>
     </button>
 
-    <!-- Sidebar -->
+    {/* Sidebar */}
     <aside
       id="sidebar"
       class="fixed md:static top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 shadow-md px-6 py-8 z-20 transition-transform duration-200 md:block hidden"
@@ -70,18 +71,17 @@ if (typeof window !== "undefined") {
               >Órdenes</a
             >
           </li>
-          </ul>
-            <div class="absolute bottom-8 left-0 w-full px-6">
-              <form action="/TSI-Group/login" method="get">
-                <button
-                type="submit"
-                class="w-full text-left block text-lg font-semibold text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400 hover:cursor-pointer"
-                >
-                Cerrar sesión
-                </button>
-              </form>
-            </div>
         </ul>
+        <div class="absolute bottom-8 left-0 w-full px-6">
+          <form action="/TSI-Group/login" method="get">
+            <button
+              type="submit"
+              class="w-full text-left block text-lg font-semibold text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400 hover:cursor-pointer"
+            >
+              Cerrar sesión
+            </button>
+          </form>
+        </div>
       </nav>
     </aside>
     <script is:inline>
@@ -114,156 +114,190 @@ if (typeof window !== "undefined") {
         document.getElementById("sidebar")?.classList.add("hidden");
       }
     </script>
-    <!-- Main Content -->
-    <main class="flex-1 px-6 py-8">
+    {/* Main Content */}
+    <main class="flex-1 px-6 py-8 flex flex-col gap-4">
       <div class="md:ml-0 ml-14">
         <h1
           class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4 mt-2 md:mt-0 transition-all duration-200"
         >
           Panel de Control
         </h1>
-        <p
-          class="text-gray-600 dark:text-gray-300 mb-8 transition-all duration-200"
-        >
-          <!-- Extrae el nombre del usuario desde localStorage (browser only) -->
-            <script is:inline>
+        <p class="text-gray-600 dark:text-gray-300 mb-8 transition-all duration-200">
+          {/* Extrae el nombre del usuario desde localStorage (browser only) */}
+          <script is:inline>
             document.addEventListener("DOMContentLoaded", function () {
               let userName = "Usuario";
               if (typeof window !== "undefined") {
-              const user = localStorage.getItem("registeredUser");
-              if (user) {
-                try {
-                const parsed = JSON.parse(user);
-                if (parsed && parsed.name) {
-                  userName = parsed.name;
+                const user = localStorage.getItem("registeredUser");
+                if (user) {
+                  try {
+                    const parsed = JSON.parse(user);
+                    if (parsed && parsed.name) {
+                      userName = parsed.name;
+                    }
+                  } catch (e) {
+                    userName = user;
+                  }
+                  // Replace underscores with spaces if present
+                  if (typeof userName === "string") {
+                    userName = userName.replace(/_/g, " ");
+                  }
                 }
-                } catch (e) {
-                userName = user;
-                }
-                // Replace underscores with spaces if present
-                if (typeof userName === "string") {
-                userName = userName.replace(/_/g, " ");
-                }
-              }
-              document
-                .getElementById("welcome-msg")
-                ?.replaceChildren(
-                document.createTextNode(
-                  `¡Bienvenido a tu panel de control, ${userName}!`
-                )
-                );
+                document
+                  .getElementById("welcome-msg")
+                  ?.replaceChildren(
+                    document.createTextNode(
+                      `¡Bienvenido a tu panel de control, ${userName}!`
+                    )
+                  );
               }
             });
-            </script>
-            <span id="welcome-msg">¡Bienvenido a tu panel de control!</span>
+          </script>
+          <span id="welcome-msg">¡Bienvenido a tu panel de control!</span>
         </p>
       </div>
+
       <div class="flex flex-col md:flex-row gap-6">
-        <!-- Stats Column -->
-        <div
-          class="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 md:mb-0"
-        >
+        {/* Stats Column */}
+        <div class="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 md:mb-0">
           <h2 class="text-xl font-semibold mb-2 dark:text-gray-100">
             Estadísticas
           </h2>
           <div class="flex flex-col space-y-4">
-            <div
-              class="bg-blue-100 dark:bg-blue-900 rounded-lg p-4 flex items-center shadow"
-            >
+            <div class="bg-blue-100 dark:bg-blue-900 rounded-lg p-4 flex items-center shadow">
               <div class="flex-1">
-                <div
-                  class="text-sm text-blue-700 dark:text-blue-200 font-semibold"
-                >
+                <div class="text-sm text-blue-700 dark:text-blue-200 font-semibold">
                   Usuarios
                 </div>
-                <div
-                  class="text-2xl font-bold text-blue-900 dark:text-blue-100"
-                >
+                <div class="text-2xl font-bold text-blue-900 dark:text-blue-100">
                   {stats.users}
                 </div>
               </div>
             </div>
-            <div
-              class="bg-green-100 dark:bg-green-900 rounded-lg p-4 flex items-center shadow"
-            >
+            <div class="bg-green-100 dark:bg-green-900 rounded-lg p-4 flex items-center shadow">
               <div class="flex-1">
-                <div
-                  class="text-sm text-green-700 dark:text-green-200 font-semibold"
-                >
+                <div class="text-sm text-green-700 dark:text-green-200 font-semibold">
                   Ingresos
                 </div>
-                <div
-                  class="text-2xl font-bold text-green-900 dark:text-green-100"
-                >
+                <div class="text-2xl font-bold text-green-900 dark:text-green-100">
                   {stats.revenue}
                 </div>
               </div>
             </div>
-            <div
-              class="bg-yellow-100 dark:bg-yellow-900 rounded-lg p-4 flex items-center shadow"
-            >
+            <div class="bg-yellow-100 dark:bg-yellow-900 rounded-lg p-4 flex items-center shadow">
               <div class="flex-1">
-                <div
-                  class="text-sm text-yellow-700 dark:text-yellow-200 font-semibold"
-                >
+                <div class="text-sm text-yellow-700 dark:text-yellow-200 font-semibold">
                   Crecimiento
                 </div>
-                <div
-                  class="text-2xl font-bold text-yellow-900 dark:text-yellow-100"
-                >
+                <div class="text-2xl font-bold text-yellow-900 dark:text-yellow-100">
                   {stats.growth}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- Recent Activity Column -->
-        <div
-          class="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 md:mb-0"
-        >
+        {/* Recent Activity Column */}
+        <div class="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 md:mb-0">
           <h2 class="text-xl font-semibold mb-2 dark:text-gray-100">
             Actividad Reciente
           </h2>
           <ul class="text-gray-500 dark:text-gray-300 space-y-1">
-            {
-              activities.map((activity) => (
-                <li class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm mb-2">
-                  <span class="flex-1 text-gray-700 dark:text-gray-200">
-                    {activity.text}
-                  </span>
-                  <span class="ml-4 text-xs text-gray-400 bg-gray-200 dark:bg-gray-700 rounded px-2 py-0.5">
-                    {activity.time}
-                  </span>
-                </li>
-              ))
-            }
+            {activities.map((activity) => (
+              <li class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm mb-2">
+                <span class="flex-1 text-gray-700 dark:text-gray-200">
+                  {activity.text}
+                </span>
+                <span class="ml-4 text-xs text-gray-400 bg-gray-200 dark:bg-gray-700 rounded px-2 py-0.5">
+                  {activity.time}
+                </span>
+              </li>
+            ))}
           </ul>
         </div>
-        <!-- Tasks Column -->
+        {/* Tasks Column */}
         <div class="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow p-6">
           <h2 class="text-xl font-semibold mb-2 dark:text-gray-100">Tareas</h2>
           <ul class="text-gray-500 dark:text-gray-300 space-y-1">
-            {
-              tasks.map((task) => (
-                <li
-                  class={`flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm mb-2 transition-colors ${
-                    task.done
-                      ? "line-through text-gray-400 opacity-60"
-                      : "text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900"
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={task.done}
-                    class="mr-3 accent-blue-600 cursor-not-allowed"
-                    disabled
-                  />
-                  <span class="flex-1">{task.task}</span>
-                </li>
-              ))
-            }
+            {tasks.map((task) => (
+              <li
+                class={`flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm mb-2 transition-colors ${
+                  task.done
+                    ? "line-through text-gray-400 opacity-60"
+                    : "text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={task.done}
+                  class="mr-3 accent-blue-600 cursor-not-allowed"
+                  disabled
+                />
+                <span class="flex-1">{task.task}</span>
+              </li>
+            ))}
           </ul>
         </div>
+      </div>
+      {/* ETH Price Graph Section */}
+      <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4 dark:text-gray-100">
+          Precio de CluckinCoin
+        </h2>
+        <canvas id="ethChart" height="80"></canvas>
+        <script is:inline>
+          // Fetch ETH price history and render chart
+          document.addEventListener("DOMContentLoaded", async function () {
+            const ctx = document.getElementById("ethChart").getContext("2d");
+            // Fetch last 7 days ETH price from CoinGecko
+            const res = await fetch(
+              "https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=7"
+            );
+            const data = await res.json();
+            const prices = data.prices || [];
+            const labels = prices.map((p) => {
+              const d = new Date(p[0]);
+              return `${d.getDate()}/${d.getMonth() + 1}`;
+            });
+            const values = prices.map((p) => p[1]);
+            // Load Chart.js from CDN if not present
+            if (!window.Chart) {
+              const script = document.createElement("script");
+              script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+              script.onload = () => drawChart();
+              document.body.appendChild(script);
+            } else {
+              drawChart();
+            }
+            function drawChart() {
+              new window.Chart(ctx, {
+                type: "line",
+                data: {
+                  labels,
+                  datasets: [
+                    {
+                      label: "ETH/USD",
+                      data: values,
+                      borderColor: "#6366f1",
+                      backgroundColor: "rgba(99,102,241,0.1)",
+                      fill: true,
+                      tension: 0.3,
+                    },
+                  ],
+                },
+                options: {
+                  responsive: true,
+                  plugins: {
+                    legend: { display: true, labels: { color: "#374151" } },
+                  },
+                  scales: {
+                    x: { ticks: { color: "#6b7280" } },
+                    y: { ticks: { color: "#6b7280" } },
+                  },
+                },
+              });
+            }
+          });
+        </script>
       </div>
     </main>
   </div>
