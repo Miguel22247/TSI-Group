@@ -1,0 +1,57 @@
+[
+  {
+    "id": "tx001",
+    "type": "buy",
+    "asset": "CluckinCoin",
+    "amount": 0.05,
+    "price_usd": 35000,
+    "timestamp": "2024-06-10T09:15:00Z",
+    "from": "external_wallet",
+    "to": "user_wallet",
+    "user": "name_of_user"
+  },
+  {
+    "id": "tx002",
+    "type": "sell",
+    "asset": "CluckinCoin",
+    "amount": 1.2,
+    "price_usd": 2500,
+    "timestamp": "2024-06-11T14:30:00Z",
+    "from": "user_wallet",
+    "to": "external_wallet",
+    "user": "name_of_user"
+  },
+  {
+    "id": "tx003",
+    "type": "transfer",
+    "asset": "CluckinCoin",
+    "amount": 500,
+    "price_usd": 1,
+    "timestamp": "2024-06-12T12:00:00Z",
+    "from": "user_wallet",
+    "to": "exchange_wallet",
+    "user": "name_of_user"
+  },
+  {
+    "id": "tx004",
+    "type": "buy",
+    "asset": "CluckinCoin",
+    "amount": 10,
+    "price_usd": 150,
+    "timestamp": "2024-06-13T08:45:00Z",
+    "from": "external_wallet",
+    "to": "user_wallet",
+    "user": "name_of_user"
+  },
+  {
+    "id": "tx005",
+    "type": "transfer",
+    "asset": "CluckinCoin",
+    "amount": 0.01,
+    "price_usd": 36000,
+    "timestamp": "2024-06-14T16:20:00Z",
+    "from": "user_wallet",
+    "to": "hardware_wallet",
+    "user": "name_of_user"
+  }
+]
