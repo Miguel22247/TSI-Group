@@ -10,11 +10,6 @@ const activities = [
   { id: 2, text: "Orden #1234 completada", time: "hace 4 horas" },
   { id: 3, text: "La usuaria JaneSmith se unió", time: "hace 1 día" },
 ];
-const tasks = [
-  { id: 1, task: "Revisar solicitudes de inversión", done: false },
-  { id: 2, task: "Actualizar la interfaz del panel", done: true },
-  { id: 3, task: "Enviar informe semanal", done: false },
-];
 
 if (typeof window !== "undefined") {
   const item = localStorage.getItem("item");
@@ -26,67 +21,70 @@ if (typeof window !== "undefined") {
   <div
     class="flex min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700"
   >
-    {/* Sidebar */}
-    {/* Mobile Sidebar Toggle Button */}
-    <button
-      id="sidebar-toggle"
-      type="button"
-      class="md:hidden fixed top-4 left-4 z-30 p-2 rounded bg-white dark:bg-gray-900 shadow focus:outline-none"
-      aria-label="Abrir menú"
-      onclick="document.getElementById('sidebar').classList.toggle('hidden')"
-    >
-      <svg
+    {/* Sidebar Container */}
+    <div class="flex-shrink-0">
+      {/* Mobile Sidebar Toggle Button */}
+      <button
+        id="sidebar-toggle"
+        type="button"
+        class="md:hidden fixed top-4 left-4 z-30 p-2 rounded bg-white dark:bg-gray-900 shadow focus:outline-none"
+        aria-label="Abrir menú"
+        onclick="document.getElementById('sidebar').classList.toggle('hidden')"
+      >
+        <svg
         class="w-6 h-6 text-gray-700 dark:text-gray-200"
         fill="none"
         stroke="currentColor"
         stroke-width="2"
         viewBox="0 0 24 24"
-      >
+        >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
           d="M4 6h16M4 12h16M4 18h16"
         ></path>
-      </svg>
-    </button>
+        </svg>
+      </button>
 
-    {/* Sidebar */}
-    <aside
-      id="sidebar"
-      class="fixed md:static top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 shadow-md px-6 py-8 z-20 transition-transform duration-200 md:block hidden"
-    >
-      <nav>
-        <ul class="space-y-4">
+      {/* Sidebar */}
+      <aside
+        id="sidebar"
+        class="fixed md:static top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 shadow-md px-6 py-8 z-20 transition-transform duration-200 md:block hidden flex flex-col justify-between"
+        style="overflow-y: auto;"
+      >
+        <nav class="flex flex-col h-full">
+        <ul class="space-y-4 flex-1">
           <li>
-            <a
-              href="#"
-              class="block text-lg font-semibold text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
-              >Invertir</a
-            >
+          <a
+            href="#"
+            class="block text-lg font-semibold text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
+            >Invertir</a
+          >
           </li>
           <li>
-            <a
-              href="#"
-              class="block text-lg font-semibold text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
-              >Órdenes</a
-            >
+          <a
+            href="#"
+            class="block text-lg font-semibold text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
+            >Órdenes</a
+          >
           </li>
         </ul>
-        <div class="absolute bottom-8 left-0 w-full px-6">
+        <div class="w-full">
           <form action="/TSI-Group/login" method="get">
-            <button
-              type="submit"
-              class="w-full text-left block text-lg font-semibold text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400 hover:cursor-pointer"
-            >
-              Cerrar sesión
-            </button>
+          <button
+            type="submit"
+            class="w-full text-left block text-lg font-semibold text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400 hover:cursor-pointer relative z-10"
+            style="pointer-events: auto;"
+          >
+            Cerrar sesión
+          </button>
           </form>
         </div>
-      </nav>
-    </aside>
-    <script is:inline>
-      // Hide sidebar when clicking outside (on mobile)
-      document.addEventListener("click", function (e) {
+        </nav>
+      </aside>
+      <script is:inline>
+        // Hide sidebar when clicking outside (on mobile)
+        document.addEventListener("click", function (e) {
         const sidebar = document.getElementById("sidebar");
         const toggle = document.getElementById("sidebar-toggle");
         if (!sidebar || !toggle) return;
@@ -98,9 +96,9 @@ if (typeof window !== "undefined") {
         ) {
           sidebar.classList.add("hidden");
         }
-      });
-      // Ensure sidebar is visible on resize for md+
-      window.addEventListener("resize", function () {
+        });
+        // Ensure sidebar is visible on resize for md+
+        window.addEventListener("resize", function () {
         const sidebar = document.getElementById("sidebar");
         if (!sidebar) return;
         if (window.innerWidth >= 768) {
@@ -108,14 +106,33 @@ if (typeof window !== "undefined") {
         } else {
           sidebar.classList.add("hidden");
         }
-      });
-      // Hide sidebar by default on mobile
-      if (window.innerWidth < 768) {
+        });
+        // Hide sidebar by default on mobile
+        if (window.innerWidth < 768) {
         document.getElementById("sidebar")?.classList.add("hidden");
-      }
-    </script>
+        }
+      </script>
+      <style is:inline>
+        /* Prevent main hover effects from affecting sidebar logout button */
+        #sidebar button[type="submit"] {
+        position: relative;
+        z-index: 10;
+        pointer-events: auto;
+        }
+        /* Make sidebar static and scrollable, main scrolls independently */
+        @media (min-width: 768px) {
+        #sidebar {
+          position: static !important;
+          height: 100vh;
+          min-height: 100vh;
+          max-height: 100vh;
+          overflow-y: auto;
+        }
+        }
+      </style>
+    </div>
     {/* Main Content */}
-    <main class="flex-1 px-6 py-8 flex flex-col gap-4">
+    <main class="flex-1 px-6 py-8 flex flex-col gap-4 overflow-y-auto h-screen md:h-screen" style="max-height: 100vh;">
       <div class="md:ml-0 ml-14">
         <h1
           class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4 mt-2 md:mt-0 transition-all duration-200"
@@ -214,29 +231,6 @@ if (typeof window !== "undefined") {
             ))}
           </ul>
         </div>
-        {/* Tasks Column */}
-        <div class="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow p-6">
-          <h2 class="text-xl font-semibold mb-2 dark:text-gray-100">Tareas</h2>
-          <ul class="text-gray-500 dark:text-gray-300 space-y-1">
-            {tasks.map((task) => (
-              <li
-                class={`flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm mb-2 transition-colors ${
-                  task.done
-                    ? "line-through text-gray-400 opacity-60"
-                    : "text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={task.done}
-                  class="mr-3 accent-blue-600 cursor-not-allowed"
-                  disabled
-                />
-                <span class="flex-1">{task.task}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
       {/* ETH Price Graph Section */}
       <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-8">
@@ -275,7 +269,7 @@ if (typeof window !== "undefined") {
                   labels,
                   datasets: [
                     {
-                      label: "ETH/USD",
+                      label: "CluckinCoin/USD",
                       data: values,
                       borderColor: "#6366f1",
                       backgroundColor: "rgba(99,102,241,0.1)",
@@ -299,6 +293,82 @@ if (typeof window !== "undefined") {
           });
         </script>
       </div>
+      {/* Transactions Section */}
+      <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4 dark:text-gray-100">
+          Transacciones Recientes
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tipo</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Usuario</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Cantidad</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Fecha</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+              {[
+                { type: "Compra", user: "JohnDoe", amount: "$1,200", date: "2024-06-01" },
+                { type: "Venta", user: "JaneSmith", amount: "$800", date: "2024-06-01" },
+                { type: "Transferencia", user: "CarlosM", amount: "$500", date: "2024-05-31" },
+                { type: "Compra", user: "AnaP", amount: "$2,000", date: "2024-05-31" },
+                { type: "Venta", user: "LuisR", amount: "$1,100", date: "2024-05-30" },
+                { type: "Compra", user: "MariaG", amount: "$950", date: "2024-05-30" },
+                { type: "Transferencia", user: "PedroQ", amount: "$400", date: "2024-05-29" },
+                { type: "Compra", user: "SofiaL", amount: "$1,500", date: "2024-05-29" },
+                { type: "Venta", user: "LuciaV", amount: "$700", date: "2024-05-28" },
+                { type: "Compra", user: "MiguelT", amount: "$1,800", date: "2024-05-28" },
+                { type: "Transferencia", user: "ElenaF", amount: "$600", date: "2024-05-27" },
+                { type: "Compra", user: "RaulS", amount: "$1,100", date: "2024-05-27" },
+                { type: "Venta", user: "PatriciaC", amount: "$900", date: "2024-05-26" },
+                { type: "Compra", user: "AndresB", amount: "$2,200", date: "2024-05-26" },
+                { type: "Transferencia", user: "GabrielaN", amount: "$750", date: "2024-05-25" },
+                { type: "Compra", user: "VictorZ", amount: "$1,300", date: "2024-05-25" },
+                { type: "Venta", user: "LauraW", amount: "$1,000", date: "2024-05-24" },
+                { type: "Compra", user: "OscarD", amount: "$1,700", date: "2024-05-24" },
+                { type: "Transferencia", user: "NataliaE", amount: "$550", date: "2024-05-23" },
+                { type: "Compra", user: "FernandoH", amount: "$1,400", date: "2024-05-23" },
+              ].map((tx, idx) => (
+                <tr class={`hover:bg-gray-50 dark:hover:bg-gray-800 ${idx % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800"}`}>
+                  <td class="px-4 py-2 whitespace-nowrap">
+                    <span class={`px-2 py-1 rounded text-xs font-semibold
+                      ${tx.type === "Compra" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                        : tx.type === "Venta" ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                        : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"}`}>
+                      {tx.type}
+                    </span>
+                  </td>
+                  <td class="px-4 py-2 whitespace-nowrap text-gray-700 dark:text-gray-200">{tx.user}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-gray-700 dark:text-gray-200">{tx.amount}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-gray-500 dark:text-gray-400">{tx.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </main>
   </div>
+  <style is:inline>
+    html, body, #app, #__astro_root {
+      height: 100%;
+      min-height: 100%;
+    }
+    body {
+      overflow: hidden;
+    }
+    main[role="main"], main {
+      overflow-y: auto;
+      height: 100vh;
+      max-height: 100vh;
+    }
+    @media (max-width: 767px) {
+      main[role="main"], main {
+        height: auto;
+        max-height: none;
+      }
+    }
+  </style>
 </Layout>
