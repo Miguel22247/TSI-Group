@@ -367,14 +367,14 @@ if (typeof window !== "undefined") {
                       <span
                         class={`px-2 py-1 rounded text-xs font-semibold
                       ${
-                        tx.type === "Compra"
+                        tx.type === "compra"
                           ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                          : tx.type === "Venta"
+                          : tx.type === "venta"
                             ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
                             : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                       }`}
                       >
-                        {tx.type}
+                        {tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}
                       </span>
                     </td>
                     <td class="px-4 py-2 whitespace-nowrap text-gray-700 dark:text-gray-200">
