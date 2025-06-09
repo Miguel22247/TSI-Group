@@ -31,7 +31,7 @@ const transactions = [];
 const total = 1000; // Number of transactions
 
 for (let i = 0; i < total; i++) {
-  const type = Math.random() > 0.5 ? 'comprar' : 'vender';
+  const type = Math.random() > 0.5 ? 'compra' : 'venta'; // Randomly choose 'buy' or 'sell'
   transactions.push(randomTransaction(type));
 }
 
