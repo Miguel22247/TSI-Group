@@ -7,7 +7,7 @@ import Sidebar from "../components/layout/Sidebar.astro";
 const title = "Panel de Control";
 
 // get the name of the user from localStorage (browser only)
-const stats = { users: 10000, revenue: "$100,000", growth: "22%" };
+const stats = { users: 2000, revenue: "$75,544", growth: "2%" };
 
 if (typeof window !== "undefined") {
   const item = localStorage.getItem("item");
@@ -23,7 +23,7 @@ if (typeof window !== "undefined") {
     <Sidebar />
     {/* Main Content */}
     <main
-      class="flex-1 px-6 py-8 flex flex-col gap-4 overflow-y-auto h-screen md:h-screen"
+      class="flex-1 px-2 py-12 flex flex-col gap-4 overflow-y-auto h-screen md:h-screen"
       style="max-height: 100vh;"
     >
       <div class="md:ml-0 ml-14">
@@ -78,7 +78,7 @@ if (typeof window !== "undefined") {
             Estadísticas
           </h2>
           <div class="flex flex-col space-y-4">
-            <div
+            <!-- <div
               class="bg-blue-100 dark:bg-blue-900 rounded-lg p-4 flex items-center shadow"
             >
               <div class="flex-1">
@@ -93,7 +93,7 @@ if (typeof window !== "undefined") {
                   {stats.users}
                 </div>
               </div>
-            </div>
+            </div> -->
             <div
               class="bg-green-100 dark:bg-green-900 rounded-lg p-4 flex items-center shadow"
             >
@@ -110,7 +110,7 @@ if (typeof window !== "undefined") {
                 </div>
               </div>
             </div>
-            <div
+            <!-- <div
               class="bg-yellow-100 dark:bg-yellow-900 rounded-lg p-4 flex items-center shadow"
             >
               <div class="flex-1">
@@ -125,11 +125,11 @@ if (typeof window !== "undefined") {
                   {stats.growth}
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         {/* Recent Activity Column */}
-        <div
+        <!-- <div
           class="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 md:mb-0"
         >
           <h2 class="text-xl font-semibold mb-2 dark:text-gray-100">
@@ -157,14 +157,20 @@ if (typeof window !== "undefined") {
               ))
             }
           </ul>
-        </div>
+        </div> -->
       </div>
       {/* ETH Price Graph Section */}
       <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-8">
         <h2 class="text-xl font-semibold mb-4 dark:text-gray-100">
           Precio de CluckinCoin
         </h2>
-        <canvas id="ethChart" height="80"></canvas>
+        <div class="w-full" style="height:180px;max-width:100%;">
+          <canvas
+            id="ethChart"
+            height="120"
+            style="height:180px;width:100%;max-width:100%;"
+            class="sm:h-[120px] h-[180px]"></canvas>
+        </div>
         <script is:inline>
           // Fetch ETH price history and render chart
           document.addEventListener("DOMContentLoaded", async function () {
@@ -207,6 +213,7 @@ if (typeof window !== "undefined") {
                 },
                 options: {
                   responsive: true,
+                  maintainAspectRatio: false,
                   plugins: {
                     legend: { display: true, labels: { color: "#374151" } },
                   },
@@ -221,7 +228,7 @@ if (typeof window !== "undefined") {
         </script>
       </div>
       {/* Transactions Section */}
-      <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-8">
+      <!-- <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-8">
         <h2 class="text-xl font-semibold mb-4 dark:text-gray-100">
           Transacciones Recientes
         </h2>
@@ -294,7 +301,7 @@ if (typeof window !== "undefined") {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> -->
     </main>
   </div>
   <style is:inline>
