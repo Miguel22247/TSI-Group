@@ -1,5 +1,4 @@
 ---
-
 ---
 
 <div class="flex-shrink-0">
@@ -7,7 +6,7 @@
   <button
     id="sidebar-toggle"
     type="button"
-    class="md:hidden fixed top-4 left-4 z-30 p-2 rounded bg-white dark:bg-gray-900 shadow focus:outline-none"
+    class="md:hidden fixed top-4 left-4 z-40 p-2 rounded bg-white dark:bg-gray-900 shadow focus:outline-none"
     aria-label="Abrir menú"
     onclick="document.getElementById('sidebar').classList.toggle('hidden')"
   >
@@ -28,11 +27,11 @@
   {/* Sidebar */}
   <aside
     id="sidebar"
-    class="fixed md:static top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 shadow-md px-6 py-8 z-20 transition-transform duration-200 md:block hidden flex flex-col justify-between"
+    class="fixed md:static top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 shadow-md px-6 py-8 md:py-0 z-30 transition-transform duration-200 md:block hidden flex flex-col justify-between"
     style="overflow-y: auto;"
   >
     <nav class="flex flex-col h-full">
-      <ul class="space-y-4 flex-1">
+      <ul class="space-y-4 flex-1 mt-16">
         <li>
           <a
             href="/TSI-Group/dashboard"
@@ -113,6 +112,23 @@
         min-height: 100vh;
         max-height: 100vh;
         overflow-y: auto;
+        z-index: 20;
+      }
+    }
+    /* On mobile, sidebar overlays above content and below toggle */
+    @media (max-width: 767px) {
+      #sidebar {
+        z-index: 30;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        min-height: 100vh;
+        max-height: 100vh;
+        position: fixed !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      }
+      #sidebar-toggle {
+        z-index: 40;
       }
     }
   </style>
