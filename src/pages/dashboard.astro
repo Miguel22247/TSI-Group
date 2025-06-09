@@ -7,7 +7,25 @@ import Sidebar from "../components/layout/Sidebar.astro";
 const title = "Panel de Control";
 
 // get the name of the user from localStorage (browser only)
-const stats = { users: 2000, revenue: "$75,544", growth: "2%" };
+let stats = { users: 2000, revenue: "$75,544", growth: "2%" };
+
+// Calculate ETH 7-day growth dynamically (SSR)
+try {
+  const res = await fetch(
+    "https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=7"
+  );
+  const data = await res.json();
+  const prices = data.prices || [];
+  if (prices.length > 1) {
+    const first = prices[0][1];
+    const last = prices[prices.length - 1][1];
+    const growthPct = ((last - first) / first) * 100;
+    stats.growth = `${growthPct >= 0 ? "+" : ""}${growthPct.toFixed(2)}%`;
+  }
+} catch (e) {
+  // fallback if fetch fails
+  stats.growth = "2%";
+}
 
 if (typeof window !== "undefined") {
   const item = localStorage.getItem("item");
@@ -77,56 +95,56 @@ if (typeof window !== "undefined") {
           <h2 class="text-xl font-semibold mb-2 dark:text-gray-100">
             Estadísticas
           </h2>
-          <div class="flex flex-col space-y-4">
-            <!-- <div
-              class="bg-blue-100 dark:bg-blue-900 rounded-lg p-4 flex items-center shadow"
-            >
-              <div class="flex-1">
-                <div
-                  class="text-sm text-blue-700 dark:text-blue-200 font-semibold"
-                >
-                  Usuarios
-                </div>
-                <div
-                  class="text-2xl font-bold text-blue-900 dark:text-blue-100"
-                >
-                  {stats.users}
-                </div>
-              </div>
-            </div> -->
+            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
             <div
-              class="bg-green-100 dark:bg-green-900 rounded-lg p-4 flex items-center shadow"
+              class="flex-1 bg-blue-100 dark:bg-blue-900 rounded-lg p-4 flex items-center shadow"
             >
               <div class="flex-1">
-                <div
-                  class="text-sm text-green-700 dark:text-green-200 font-semibold"
-                >
-                  Ingresos
-                </div>
-                <div
-                  class="text-2xl font-bold text-green-900 dark:text-green-100"
-                >
-                  {stats.revenue}
-                </div>
+              <div
+                class="text-sm text-blue-700 dark:text-blue-200 font-semibold"
+              >
+                Usuarios
+              </div>
+              <div
+                class="text-2xl font-bold text-blue-900 dark:text-blue-100"
+              >
+                {stats.users}
+              </div>
               </div>
             </div>
-            <!-- <div
-              class="bg-yellow-100 dark:bg-yellow-900 rounded-lg p-4 flex items-center shadow"
+            <div
+              class="flex-1 bg-green-100 dark:bg-green-900 rounded-lg p-4 flex items-center shadow"
             >
               <div class="flex-1">
-                <div
-                  class="text-sm text-yellow-700 dark:text-yellow-200 font-semibold"
-                >
-                  Crecimiento
-                </div>
-                <div
-                  class="text-2xl font-bold text-yellow-900 dark:text-yellow-100"
-                >
-                  {stats.growth}
-                </div>
+              <div
+                class="text-sm text-green-700 dark:text-green-200 font-semibold"
+              >
+                Ingresos
               </div>
-            </div> -->
-          </div>
+              <div
+                class="text-2xl font-bold text-green-900 dark:text-green-100"
+              >
+                {stats.revenue}
+              </div>
+              </div>
+            </div>
+            <div
+              class="flex-1 bg-yellow-100 dark:bg-yellow-900 rounded-lg p-4 flex items-center shadow"
+            >
+              <div class="flex-1">
+              <div
+                class="text-sm text-yellow-700 dark:text-yellow-200 font-semibold"
+              >
+                Crecimiento
+              </div>
+              <div
+                class="text-2xl font-bold text-yellow-900 dark:text-yellow-100"
+              >
+                {stats.growth}
+              </div>
+              </div>
+            </div>
+            </div>
         </div>
         {/* Recent Activity Column */}
         <!-- <div
@@ -228,7 +246,7 @@ if (typeof window !== "undefined") {
         </script>
       </div>
       {/* Transactions Section */}
-      <!-- <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-8">
+      <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-8">
         <h2 class="text-xl font-semibold mb-4 dark:text-gray-100">
           Transacciones Recientes
         </h2>
@@ -301,7 +319,7 @@ if (typeof window !== "undefined") {
             </tbody>
           </table>
         </div>
-      </div> -->
+      </div>
     </main>
   </div>
   <style is:inline>
