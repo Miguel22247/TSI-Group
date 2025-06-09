@@ -8,17 +8,27 @@ const title = "Invertir";
 // Remove React imports and hooks; use a simple HTML form with no client-side interactivity.
 // You can handle the form submission on the server or add a client:load/client:only React component if interactivity is needed.
 ---
+
 <Layout title={title}>
-  <div class="flex min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700">
+  <div
+    class="flex min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700"
+  >
     <div class="w-64 flex-shrink-0">
       <Sidebar />
     </div>
     <main class="flex-1 px-2 sm:px-6 py-4 flex items-center justify-center">
       <div class="w-full max-w-md">
         <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
-          <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100 text-center">Invertir</h1>
+          <h1
+            class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100 text-center"
+          >
+            Invertir
+          </h1>
           <form id="invest-form" class="flex flex-col gap-4">
-            <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label
+              for="amount"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
               Monto a invertir:
             </label>
             <input
@@ -43,15 +53,92 @@ const title = "Invertir";
     </main>
   </div>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('invest-form');
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("invest-form");
       if (form) {
-        form.addEventListener('submit', function (e) {
+        form.addEventListener("submit", function (e) {
           e.preventDefault();
-          const amount = ((form as HTMLFormElement).elements.namedItem('amount') as HTMLInputElement)?.value || '';
-          alert(`¡Inversión de ${amount} registrada!`);
-          (form as HTMLFormElement).reset();
+          handleInvestmentSubmit(form as HTMLFormElement);
         });
+
+        async function handleInvestmentSubmit(form: HTMLFormElement) {
+          const amount =
+            (
+              (form as HTMLFormElement).elements.namedItem(
+                "amount"
+              ) as HTMLInputElement
+            )?.value || "";
+          if (!amount) {
+            alert("Por favor, ingresa un monto válido.");
+            return;
+          } else {
+            // Obtener el nombre del usuario desde localStorage
+            const registeredUser = localStorage.getItem("registeredUser");
+            let user = "";
+            if (registeredUser) {
+              try {
+                const parsed = JSON.parse(registeredUser);
+                user = parsed.name || "";
+              } catch {
+                user = "";
+              }
+            }
+            if (!user) {
+              alert(
+                "No se encontró un usuario registrado. Por favor, regístrate primero."
+              );
+              return;
+            }
+
+            // Generar un ID único simple
+            const id = "tx" + Date.now();
+
+            // Obtener el precio actual de ETH en USD y calcular el total
+            let price_usd = 0;
+            try {
+              const res = await fetch(
+                "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+              );
+              const data = await res.json();
+              const ethPrice = data?.ethereum?.usd || 0;
+              price_usd = Number(amount) * ethPrice;
+            } catch {
+              price_usd = 0;
+            }
+
+            // Crear el objeto de inversión
+            const investment = {
+              id,
+              type: "compra",
+              asset: "CluckinCoin",
+              amount: Number(amount),
+              price_usd,
+              timestamp: new Date().toISOString(),
+              from: "user_wallet",
+              to: "external_wallet",
+              user,
+              status: "confirmada",
+            };
+
+            // Guardar en localStorage
+            const key = "investments";
+            let investments = [];
+            const stored = localStorage.getItem(key);
+            if (stored) {
+              try {
+                investments = JSON.parse(stored);
+                if (!Array.isArray(investments)) investments = [];
+              } catch {
+                investments = [];
+              }
+            }
+            investments.push(investment);
+            localStorage.setItem(key, JSON.stringify(investments));
+
+            alert(`¡Inversión de ${amount} registrada para ${user}!`);
+          }
+          (form as HTMLFormElement).reset();
+        }
       }
     });
   </script>
