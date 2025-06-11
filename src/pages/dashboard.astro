@@ -9,32 +9,6 @@ const title = "Panel de Control";
 // get the name of the user from localStorage (browser only)
 let stats = { users: 2000, revenue: "$0", growth: "2%" };
 
-// Try to get investments from localStorage and calculate revenue (SSR fallback)
-try {
-  console.log("Attempting to read investments from localStorage...");
-  const investmentsRaw = window.localStorage.getItem("investments");
-  console.log("Raw investments from localStorage:", investmentsRaw);
-  if (investmentsRaw) {
-    const investments = JSON.parse(investmentsRaw);
-    console.log("Parsed investments:", investments);
-    if (Array.isArray(investments)) {
-      const total = investments.reduce(
-        (sum, inv) =>
-          sum + (typeof inv.price_usd === "number" ? inv.price_usd : 0),
-        0
-      );
-      console.log("Calculated total revenue from investments:", total);
-      stats.revenue = `$${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    } else {
-      console.log("Investments is not an array.");
-    }
-  } else {
-    console.log("No investments found in localStorage.");
-  }
-} catch (e) {
-  // fallback to default revenue
-}
-
 // Calculate ETH 7-day growth dynamically (SSR)
 try {
   const res = await fetch(
@@ -152,51 +126,35 @@ if (typeof window !== "undefined") {
                 <div
                   class="text-2xl font-bold text-green-900 dark:text-green-100"
                 >
+                  <span id="revenue-amount">$0</span>
                   <script is:inline>
-                    if (typeof window === "undefined") {
-                      // SSR: fallback to default revenue
-                    } else {
-                      try {
-                        console.log(
-                          "Attempting to read investments from localStorage..."
-                        );
-                        const investmentsRaw =
-                          window.localStorage.getItem("investments");
-                        console.log(
-                          "Raw investments from localStorage:",
-                          investmentsRaw
-                        );
-                        if (investmentsRaw) {
-                          const investments = JSON.parse(investmentsRaw);
-                          console.log("Parsed investments:", investments);
-                          if (Array.isArray(investments)) {
-                            const total = investments.reduce(
-                              (sum, inv) =>
-                                sum +
-                                (typeof inv.price_usd === "number"
-                                  ? inv.price_usd
-                                  : 0),
-                              0
-                            );
-                            console.log(
-                              "Calculated total revenue from investments:",
-                              total
-                            );
-                            // Insert the total into the UI
-                            const revenueElem =
-                              document.currentScript?.parentElement;
-                            if (revenueElem) {
+                    if (typeof window !== "undefined") {
+                      const revenueElem = document.getElementById("revenue-amount");
+                      if (revenueElem) {
+                        revenueElem.textContent = "$0";
+                        try {
+                          const investmentsRaw = window.localStorage.getItem("investments");
+                          if (
+                            investmentsRaw &&
+                            investmentsRaw.trim() !== "" &&
+                            investmentsRaw !== "[]"
+                          ) {
+                            const investments = JSON.parse(investmentsRaw);
+                            if (Array.isArray(investments) && investments.length > 0) {
+                              const total = investments.reduce(
+                                (sum, inv) =>
+                                  sum +
+                                  (typeof inv.price_usd === "number"
+                                    ? inv.price_usd
+                                    : 0),
+                                0
+                              );
                               revenueElem.textContent = `$${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                             }
-                            stats.revenue = `$${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                          } else {
-                            console.log("Investments is not an array.");
                           }
-                        } else {
-                          console.log("No investments found in localStorage.");
+                        } catch (e) {
+                          // fallback to default revenue, already set above
                         }
-                      } catch (e) {
-                        // fallback to default revenue
                       }
                     }
                   </script>
